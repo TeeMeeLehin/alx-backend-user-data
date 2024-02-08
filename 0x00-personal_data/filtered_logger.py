@@ -8,11 +8,10 @@ def filter_datum(fields: List[str], redaction: str,
                  message: str, separator: str) -> str:
     """function that returns the log message obfuscated"""
     pairs = message.strip(';').split(';')
-    res = ""
+    res = []
     for pair in pairs:
         if pair.split('=')[0] in fields:
             pair = re.sub(r'=' + re.escape(
                 pair.split('=')[1]), '=' + redaction, pair)
-        res += pair
-        res += ";"
-    return res
+        res.append(pair)
+    return separator.join(res)
