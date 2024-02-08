@@ -4,10 +4,15 @@ from typing import List
 import re
 
 
-def filter_datum(fields: List[str], redaction: str, message: str,
-                 separator: str) -> str:
+def filter_datum(fields: List[str], redaction: str,
+                 message: str, separator: str) -> str:
     """function that returns the log message obfuscated"""
-    return separator.join([f"{key}={redaction if key in fields else value}"
-                           for key, value in (pair.split('=', 1) for pair in
-                                              message.strip(separator).split(
-                                                      separator))])
+    pairs = message.strip(';').split(';')
+    res = ""
+    for pair in pairs:
+        if pair.split('=')[0] in fields:
+            pair = re.sub(r'=' + re.escape(
+                pair.split('=')[1]), '=' + redaction, pair)
+        res += pair
+        res += ";"
+    return res
