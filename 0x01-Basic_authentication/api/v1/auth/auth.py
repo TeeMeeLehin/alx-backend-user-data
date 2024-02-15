@@ -11,6 +11,8 @@ class Auth():
         """
         func to determine if a route requires authentication
         """
+        if not excluded_paths or excluded_paths == []:
+            return True
         if path:
             if path[-1] != "/":
                 path += "/"
