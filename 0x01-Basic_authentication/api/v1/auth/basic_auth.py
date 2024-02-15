@@ -2,6 +2,7 @@
 """basic authentication module"""
 from api.v1.auth.auth import Auth
 import base64
+from typing import Union
 
 
 class BasicAuth(Auth):
@@ -28,3 +29,14 @@ class BasicAuth(Auth):
                 except ValueError:
                     return None
         return None
+
+    def extract_user_credentials(self,
+                                 decoded_base64_authorization_header: str
+                                 ) -> Union[str, str]:
+        """func to extract user deets"""
+        if decoded_base64_authorization_header:
+            if isinstance(decoded_base64_authorization_header, str):
+                if ":" in decoded_base64_authorization_header:
+                    email, pwd = decoded_base64_authorization_header.split(':')
+                    return (email, pwd)
+        return (None, None)
