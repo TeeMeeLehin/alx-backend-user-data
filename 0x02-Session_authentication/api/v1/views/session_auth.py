@@ -28,3 +28,12 @@ def session_login() -> str:
     cookee_name = getenv('SESSION_NAME', '_my_session_id')
     output.set_cookie(cookee_name, sess_id)
     return output
+
+
+@app_views.route('/auth_session/logout', methods=['DELETE'], strict_slashes=False)
+def session_logout() -> str:
+    """func for session logout"""
+    from api.v1.app import auth
+    if auth.destroy_session(request):
+        return jsonify({}), 200
+    abort(404)

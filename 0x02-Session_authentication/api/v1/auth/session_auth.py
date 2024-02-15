@@ -29,3 +29,12 @@ class SessionAuth(Auth):
         cookee = self.session_cookie(request)
         uid = self.user_id_for_session_id(cookee)
         return User.get(uid)
+
+    def destroy_session(self, request=None):
+        """destroy user session"""
+        sess_id = self.session_cookie(request)
+        if request and sess_id:
+            if self.user_id_for_session_id(sess_id):
+                del self.user_id_by_session_id[sess_id]
+                return True
+        return False
