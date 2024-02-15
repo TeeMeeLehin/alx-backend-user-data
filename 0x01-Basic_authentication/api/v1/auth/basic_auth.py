@@ -49,7 +49,10 @@ class BasicAuth(Auth):
         """func to return user instance"""
         if user_email and isinstance(user_email, str):
             if user_pwd and isinstance(user_pwd, str):
-                users = User.search({"email": user_email})
+                try:
+                    users = User.search({"email": user_email})
+                except Exception:
+                    return None
                 if len(users) > 0:
                     for user in users:
                         if user.is_valid_password(user_pwd):
