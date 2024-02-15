@@ -28,6 +28,7 @@ if auth:
 @app.before_request
 def pre_req():
     """pre request func"""
+    request.current_user = auth.current_user(request)
     if not auth:
         return
     if not auth.require_auth(request.path, ['/api/v1/status/',
