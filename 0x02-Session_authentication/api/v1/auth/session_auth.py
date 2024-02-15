@@ -2,6 +2,7 @@
 """session authentication module"""
 from api.v1.auth.auth import Auth
 import uuid
+from models.user import User
 
 
 class SessionAuth(Auth):
@@ -22,3 +23,9 @@ class SessionAuth(Auth):
         if session_id and isinstance(session_id, str):
             return self.user_id_by_session_id.get(session_id)
         return None
+
+    def current_user(self, request=None):
+        """returns current user"""
+        cookee = self.session_cookie(request)
+        uid = self.user_id_for_session_id(cookee)
+        return User.get(uid)
